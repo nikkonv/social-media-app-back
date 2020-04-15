@@ -1,0 +1,61 @@
+const functions = require("firebase-functions");
+const admin = require("firebase-admin");
+var firebaseConfig = {
+  apiKey: "AIzaSyA6aZagXchr4MmuD0QoBqprEitUXctPYUM",
+  authDomain: "social-media-app-beba9.firebaseapp.com",
+  databaseURL: "https://social-media-app-beba9.firebaseio.com",
+  projectId: "social-media-app-beba9",
+  storageBucket: "social-media-app-beba9.appspot.com",
+  messagingSenderId: "789306805843",
+  appId: "1:789306805843:web:4b0ea821f991e23c4f00a6",
+  measurementId: "G-ZD8NTBLLKB",
+};
+
+admin.initializeApp(firebaseConfig);
+
+const express = require("express");
+const app = express();
+
+app.get("/screams", (req, res) => {
+  admin
+    .firestore()
+    .collection("screams")
+    .orderBy("createdAt", "desc")
+    .get()
+    .then((data) => {
+      let screams = [];
+      data.forEach((doc) => {
+        screams.push({
+          screamId: doc.id,
+          body: doc.data().body,
+          userHandle: doc.data().userHandle,
+          createdAt: doc.data().createdAt,
+        });
+      });
+      return res.json(screams);
+    })
+    .catch((err) => console.error(err));
+});
+
+app.post("/scream", (req, res) => {
+  const newScream = {
+    body: req.body.body,
+    userHandle: req.body.userHandle,
+    createdAt: new Date().toISOString(),
+  };
+
+  admin
+    .firestore()
+    .collection("screams")
+    .add(newScream)
+    .then((doc) => {
+      res.json({ message: `document ${doc.id} created successfully` });
+    })
+    .catch((err) => {
+      res.status("500").json({ error: "something went wrong" });
+      console.error(err);
+    });
+});
+
+// https://baseurl.com/api prefix route
+exports.api = functions.https.onRequest(app);
