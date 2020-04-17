@@ -1,4 +1,4 @@
-const { admin } = require("./admin");
+const { admin, db } = require("./admin");
 
 // middleware firebase auth to verify user
 module.exports = (req, res, next) => {
@@ -18,7 +18,7 @@ module.exports = (req, res, next) => {
     .verifyIdToken(idToken)
     .then((decodedToken) => {
       req.user = decodedToken;
-      console.log(decodedToken);
+      //console.log(decodedToken);
       return db
         .collection("users")
         .where("userId", "==", req.user.uid)
