@@ -1,6 +1,11 @@
 const { admin, db } = require("./admin");
 
-// middleware firebase auth to verify user
+/*
+  middleware firebase auth to verify user
+  this helps when we need access to some route with a login user
+  using this middleware we will leave the route as restricted only for login users
+*/
+
 module.exports = (req, res, next) => {
   let idToken;
   if (
@@ -27,6 +32,7 @@ module.exports = (req, res, next) => {
     })
     .then((data) => {
       req.user.handle = data.docs[0].data().handle;
+      req.user.imageUrl = data.docs[0].data().imageUrl;
       return next();
     })
     .catch((err) => {
