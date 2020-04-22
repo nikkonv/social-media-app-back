@@ -22,9 +22,26 @@ let db = {
       commentCount: 2,
     },
   ],
+  comments: [
+    {
+      userHandle: "user",
+      screamId: "kujshf7df6dgfd8",
+      body: "cheers!",
+      createdAt: "2020-04-15T23:03:41.630Z",
+    },
+  ],
+  notifications: {
+    recipient: "user",
+    sender: "john",
+    read: "true or false",
+    screamId: "kujshf7df6dgfd8",
+    type: "like or comment",
+    createdAt: "2020-04-15T23:03:41.630Z",
+  },
 };
 
 const userDetails = {
+  // redux
   credentials: {
     userId: "SDJHSD87SJDS7SDS6",
     email: "user@email.com",
